@@ -1,0 +1,28 @@
+.App {
+  text-align: center;
+}
+.headings {
+  padding: 5px;
+  font-style: italic;
+  font-size: 20px;
+  font-weight: bold;
+  border-right: 1px solid #e19512;
+}
+.footer_button_table {
+  background-color: #ffbf4d;
+  width: 50%;
+  height: fit-content;
+  padding: 5px;
+  border-radius: 30px;
+  border: none;
+  font-size: 18px;
+  color: white;
+  font-weight: 500;
+}
+
+.texts_avg {
+  width: 300px;
+}
+.texts {
+  border-right: 1px solid #e19512;
+}

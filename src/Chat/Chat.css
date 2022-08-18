@@ -1,0 +1,179 @@
+.messenger {
+  height: calc(100vh - 45px);
+  display: flex;
+}
+.chatMenu {
+  flex: 3.5;
+}
+.searchBarDiv {
+  display: flex;
+  border-bottom: 1px solid grey;
+}
+.searchIcon {
+  padding: 20px 0;
+  font-size: larger;
+}
+.chatMenuInput {
+  width: 90%;
+  outline: none;
+  padding: 10px 0;
+  border: none;
+  background: none;
+  font-size: 1.7em;
+}
+.chatBox {
+  flex: 5.5;
+}
+
+.chatBoxWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+.chatBoxTop {
+  height: 100%;
+  overflow-y: scroll;
+  padding-right: 10px;
+}
+.chatBoxBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+.chatMessageTextInput {
+  padding: 13px;
+  width: 90%;
+  font-weight: 500;
+  height: 40px;
+  background-color: aliceblue;
+  border: none;
+  border-radius: 50px;
+}
+.chatSubmitButton {
+  width: 70px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: teal;
+  color: white;
+}
+.noChat {
+  position: absolute;
+  top: 10%;
+  font-size: 50px;
+  color: rgb(224, 221, 221);
+}
+.chatOnline {
+  flex: 3;
+}
+.chatMenuWrapper,
+.chatBoxWrapper,
+.chatOnlineWrapper {
+  padding: 10px;
+  height: 95%;
+}
+
+.top_bar {
+  background-color: #1676f0;
+  width: 100%;
+  height: 45px;
+  border: none;
+  color: white;
+  font-weight: 500;
+  flex-direction: row;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.top {
+  display: flex;
+}
+
+.topName {
+  padding-top: 7px;
+}
+.conversationImg {
+  height: 25px;
+  width: 25px;
+  border-radius: 30px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+.chatConversationContainer {
+  position: relative;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.chatConversationBadge {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  position: absolute;
+  background-color: lime;
+  bottom: 21px;
+  left: 10px;
+  border: 3px solid #1676f0;
+}
+.icons {
+  font-size: 25px;
+}
+.notification {
+  flex-direction: column;
+}
+.notificationMainMenu {
+  background-color: #126ee7;
+  color: white;
+  border-radius: 25px;
+}
+.formatDate {
+  display: flex;
+  justify-content: end;
+}
+.notificationMsg {
+  color: #126ee7;
+}
+.iconx {
+  font-size: normal;
+  display: flex;
+  justify-content: end;
+  padding: 0px 5px 0px 0px;
+  cursor: pointer;
+}
+.dropdown-toggle::after {
+  display: none;
+}
+.mainDropdown {
+  width: fit-content;
+  padding: 0px;
+}
+.notificationFooter {
+  display: flex;
+  justify-content: space-between;
+}
+#text {
+  padding-left: 10px;
+}
+.bottomTabForAboutUsers {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin: 0px 30px 30px;
+}
+.bottomIcon {
+  position: absolute;
+  cursor: pointer;
+  background-color: #126ee7;
+  padding: 13px;
+  color: white;
+  font-size: 17px;
+  border-radius: 30px;
+  align-items: center;
+}
+.bottomIcon:hover {
+  background-color: #539af7;
+}
