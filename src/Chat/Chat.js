@@ -26,18 +26,23 @@ const Chat = () => {
   const [user, setUser] = useState("");
   const [maxLength, setMaxLength] = useState(25);
   const [searchBar, setSearchBar] = useState("");
+  const [arrivalNotificaationToFollowers, setArrivalNotificaationToFollowers] =
+    useState("");
   const socket = io.connect("ws://localhost:5000");
 
   //  user_id
   const id = localStorage.getItem("userId");
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   console.log(token);
-
-  //   if (!token) {
-  //     navigate("/");
-  //   }
-  // }, []);
+  useEffect(() => {
+    console.log(user?.name);
+    if (user) {
+      setTimeout(() => {
+        if (!user?.name) {
+          navigate("/signin");
+          alert("sorry you are not register");
+        }
+      }, 3000);
+    }
+  }, []);
   // including socket.io
   useEffect(() => {
     socket.on("getMessage", (data) => {
@@ -53,6 +58,13 @@ const Chat = () => {
       setArrivalConversation(conversationData.user);
     });
   }, []);
+  useEffect(() => {
+    socket.on("getNotificationForFollowers", (senderName) => {
+      console.log("senderName", senderName);
+      setArrivalNotificaationToFollowers(senderName);
+    });
+  }, []);
+
   useEffect(() => {
     socket.on("getNotification", (notifications) => {
       setNotification({
@@ -182,16 +194,15 @@ const Chat = () => {
   // set Notifications
   const HideNotification = () => {
     setNotification("");
+    setArrivalNotificaationToFollowers("");
   };
   // for read more data
   const ReadMore = () => {
     setMaxLength((prev) => prev + 20);
   };
-  // for getting following users
-
+  console.log(conversation);
   // filter method
   const handleFilterData = () => {};
-  console.log(conversation);
   return (
     <>
       <div className="top_bar">
@@ -206,7 +217,7 @@ const Chat = () => {
         <span className="top">
           <div className="chatConversationContainer">
             <i className="fas fa-bell  icons mr-3"></i>
-            {notification ? (
+            {notification || arrivalNotificaationToFollowers ? (
               <>
                 <div
                   className="chatConversationBadge dropdown-toggle"
@@ -214,39 +225,51 @@ const Chat = () => {
                   aria-haspopup="true"
                   aria-expanded="false"
                 ></div>
-                <ul className="dropdown-menu">
+                <ul className="dropdown-menu mainul">
                   {/* {notificationUser.map((item) => ( */}
 
                   <li className="mainDropdown">
-                    <i
-                      className="fas fa-times iconx"
-                      onClick={HideNotification}
-                    ></i>
+                    <div className="mainForHeaderIcons">
+                      <i
+                        className="fas fa-arrow-left icony"
+                        onClick={createClnversationWithNotification}
+                      ></i>
+                      <i
+                        className="fas fa-times iconx"
+                        onClick={HideNotification}
+                      ></i>
+                    </div>
                     <div className="dropdown-item notification">
-                      {notificationUser?.name}
+                      {notificationUser?.name
+                        ? notificationUser?.name
+                        : arrivalNotificaationToFollowers?.senderName}
+                      {arrivalNotificaationToFollowers ? (
+                        <p>follows yourself</p>
+                      ) : null}
+
                       <div className="notificationMsg">
-                        {`${notification?.msg.substring(0, maxLength)}`}
-                        {notification?.msg.length > maxLength ? "..." : ""}
+                        {notification ? (
+                          <>
+                            {notification?.msg.substring(0, maxLength)}
+                            {notification?.msg.length > maxLength ? "..." : ""}
+                          </>
+                        ) : null}
                       </div>
-                      {/* <span className="formatDate">
-                        {format(notification.createdAt)}
-                      </span> */}
                     </div>
 
-                    <li className="divider"></li>
-                    <div className="notificationFooter">
-                      {notification?.msg.length > maxLength ? (
-                        <span onClick={ReadMore} className="pl-3">
+                    {/* <li className="divider"></li> */}
+                    {/* <div className="notificationFooter">
+                      {notification && notification?.msg.length > maxLength ? (
+                        <span
+                          onClick={createClnversationWithNotification}
+                          className="pl-3"
+                        >
                           // Read more
                         </span>
                       ) : (
                         <h6></h6>
                       )}
-                      <i
-                        className="fas fa-arrow-right iconx"
-                        onClick={createClnversationWithNotification}
-                      ></i>
-                    </div>
+                    </div> */}
                   </li>
                   {/* ))} */}
                 </ul>
@@ -297,6 +320,7 @@ const Chat = () => {
                     <div ref={scrollRef} key={i}>
                       <ChatMessages
                         message={m}
+                        socket={socket}
                         own={m.sender === id ? true : false}
                       />
                     </div>

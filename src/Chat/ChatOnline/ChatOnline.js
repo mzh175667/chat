@@ -8,6 +8,7 @@ const ChatOnline = ({ users, id, socket, conversation }) => {
   var conversations = conversation[0];
   const [followedUser, setFollowedUser] = useState("");
   const [onlineUser, setOnlineUser] = useState(null);
+  const [loading, setLoading] = useState(null);
   for (let i = 0; i <= conversation.length; i++) {
     conversations = conversation[i];
     // console.log(conversations?.members[1]);
@@ -19,7 +20,7 @@ const ChatOnline = ({ users, id, socket, conversation }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const token = localStorage.getItem("token");
-  console.log(token);
+  // console.log(token);
 
   useEffect(() => {
     if (onlineUserId !== undefined) {
@@ -61,6 +62,7 @@ const ChatOnline = ({ users, id, socket, conversation }) => {
     }
   };
   const handleFollowedUserData = async () => {
+    setLoading(true);
     await fetch("http://localhost:5000/users/follow", {
       method: "PUT",
       headers: {
@@ -74,6 +76,15 @@ const ChatOnline = ({ users, id, socket, conversation }) => {
     })
       .then((res) => res.json())
       .then((res) => {
+        if (res?.success == true) {
+          let followedPersonId = res?.result?.following.pop();
+          socket.emit("sendNotificationForFollowers", {
+            senderName: res?.result?.name,
+            receiverId: followedPersonId,
+          });
+          alert(`are you sure to follow the ${res?.result?.name}`);
+          setLoading(false);
+        }
         console.log(res);
       })
       .catch((err) => {
@@ -109,7 +120,7 @@ const ChatOnline = ({ users, id, socket, conversation }) => {
                   </div>
                   <span
                     className="followText ml-2"
-                    onClick={() => handleFollowedUserData()}
+                    onClick={!loading ? handleFollowedUserData : null}
                   >
                     Follow
                     {/* <i className="fas fa-user-check ml-2"></i> */}

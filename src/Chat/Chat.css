@@ -115,7 +115,7 @@
   border-radius: 50%;
   position: absolute;
   background-color: lime;
-  bottom: 21px;
+  bottom: 12px;
   left: 10px;
   border: 3px solid #1676f0;
 }
@@ -125,30 +125,40 @@
 .notification {
   flex-direction: column;
 }
-.notificationMainMenu {
-  background-color: #126ee7;
-  color: white;
-  border-radius: 25px;
+.commentContent {
+  color: #1676f0;
+  padding: 0px 5px 0px 0px;
 }
-.formatDate {
+.mainul {
+  /* background-color: #126ee7; */
+  /* color: white; */
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  width: 200px;
+}
+.mainForHeaderIcons {
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
 }
+
 .notificationMsg {
   color: #126ee7;
 }
 .iconx {
   font-size: normal;
-  display: flex;
-  justify-content: end;
   padding: 0px 5px 0px 0px;
+  cursor: pointer;
+}
+.icony {
+  font-size: normal;
+  padding: 0px 0px 0px 15px;
   cursor: pointer;
 }
 .dropdown-toggle::after {
   display: none;
 }
 .mainDropdown {
-  width: fit-content;
   padding: 0px;
 }
 .notificationFooter {

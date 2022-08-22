@@ -12,6 +12,7 @@ export const Get_Data_Comment = createAsyncThunk("comment", async () => {
   ).then((response) => response.json());
   return results;
 });
+
 export const Get_Data_Quotes = createAsyncThunk("quotes", async () => {
   const results = await axios.get("https://api.quotable.io/random");
   console.log("responseInReducer", results);
@@ -24,6 +25,7 @@ export const Get_USER_DATA = createAsyncThunk("getUser", async () => {
   console.log("responseInReducer", results);
   return results;
 });
+
 export const DataReducer = createSlice({
   name: "data",
   initialState: {
@@ -32,7 +34,6 @@ export const DataReducer = createSlice({
     comments: [],
     quotes: {},
     users: [],
-    notification: [],
   },
   extraReducers: {
     [Get_Data.pending]: (state) => {
@@ -43,37 +44,37 @@ export const DataReducer = createSlice({
       state.data = action.payload;
     },
     [Get_Data.rejected]: (state) => {
-      state.loading = true;
+      state.loading = false;
     },
     [Get_Data_Comment.pending]: (state) => {
-      state.loading = false;
+      state.loading = true;
     },
     [Get_Data_Comment.fulfilled]: (state, action) => {
       state.loading = false;
       state.comments = action.payload;
     },
     [Get_Data_Comment.rejected]: (state) => {
-      state.loading = true;
+      state.loading = false;
     },
     [Get_Data_Quotes.pending]: (state) => {
-      state.loading = false;
+      state.loading = true;
     },
     [Get_Data_Quotes.fulfilled]: (state, action) => {
       state.loading = false;
       state.quotes = action.payload;
     },
     [Get_Data_Quotes.rejected]: (state) => {
-      state.loading = true;
+      state.loading = false;
     },
     [Get_USER_DATA.pending]: (state) => {
-      state.loading = false;
+      state.loading = true;
     },
     [Get_USER_DATA.fulfilled]: (state, action) => {
       state.loading = false;
       state.users = action.payload;
     },
     [Get_USER_DATA.rejected]: (state) => {
-      state.loading = true;
+      state.loading = false;
     },
   },
 });

@@ -28,6 +28,12 @@
 .messages.own {
   align-items: flex-end;
 }
+.seenText {
+  font-weight: bold;
+  font-size: 7px;
+  padding: 5px 0px 0px 5px;
+  color: #00fb00;
+}
 .messages.own .messagesText {
   background-color: rgb(245, 241, 241);
   color: black;

@@ -1,7 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import DataReducers from "../Reducers/DataReducers"
+import ChatReducers from "../Reducers/ChatReducers";
+import DataReducers from "../Reducers/DataReducers";
 export const store = configureStore({
- reducer:{
-     userData : DataReducers
-   }
-})
+  reducer: {
+    userData: DataReducers,
+    chat: ChatReducers,
+  },
+});
