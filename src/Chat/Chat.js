@@ -28,6 +28,8 @@ const Chat = () => {
   const [searchBar, setSearchBar] = useState("");
   const [arrivalNotificaationToFollowers, setArrivalNotificaationToFollowers] =
     useState("");
+  const [forSeen, setForSeen] = useState(null);
+
   const socket = io.connect("ws://localhost:5000");
 
   //  user_id
@@ -60,7 +62,6 @@ const Chat = () => {
   }, []);
   useEffect(() => {
     socket.on("getNotificationForFollowers", (senderName) => {
-      console.log("senderName", senderName);
       setArrivalNotificaationToFollowers(senderName);
     });
   }, []);
@@ -106,7 +107,15 @@ const Chat = () => {
       // console.log(chatOnline);
     });
   }, [id]);
-
+  useEffect(() => {
+    socket.on("getDataForSeen", (data) => {
+      console.log("data=====>", data);
+      setForSeen({
+        forSeen: data?.forSeen,
+      });
+    });
+  });
+  console.log(forSeen);
   // fetching api's....
 
   // getting conversation
@@ -200,7 +209,8 @@ const Chat = () => {
   const ReadMore = () => {
     setMaxLength((prev) => prev + 20);
   };
-  console.log(conversation);
+
+  // console.log(conversation);
   // filter method
   const handleFilterData = () => {};
   return (
@@ -321,6 +331,7 @@ const Chat = () => {
                       <ChatMessages
                         message={m}
                         socket={socket}
+                        forSeen={forSeen}
                         own={m.sender === id ? true : false}
                       />
                     </div>
@@ -351,16 +362,20 @@ const Chat = () => {
         </div>
         <div className="chatOnline">
           <div className="chatOnlineWrapper">
-            {chatOnline.map((user, i) => (
-              <div key={i}>
-                <ChatOnline
-                  users={user}
-                  id={id}
-                  socket={socket}
-                  conversation={conversation}
-                />
-              </div>
-            ))}
+            {chatOnline.length > 1 ? (
+              chatOnline.map((user, i) => (
+                <div key={i}>
+                  <ChatOnline
+                    users={user}
+                    id={id}
+                    socket={socket}
+                    conversation={conversation}
+                  />
+                </div>
+              ))
+            ) : (
+              <span className="noOnlineUser">no one was online</span>
+            )}
           </div>
           <div className="bottomTabForAboutUsers">
             <i className="fas fa-user  bottomIcon"></i>

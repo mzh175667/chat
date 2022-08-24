@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import "./ChatOnline.css";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-
+import { useNavigate } from "react-router-dom";
 const ChatOnline = ({ users, id, socket, conversation }) => {
+  const navigate = useNavigate();
+
   var conversations = conversation[0];
   const [followedUser, setFollowedUser] = useState("");
   const [onlineUser, setOnlineUser] = useState(null);
@@ -76,6 +78,10 @@ const ChatOnline = ({ users, id, socket, conversation }) => {
     })
       .then((res) => res.json())
       .then((res) => {
+        if (res?.message == "unauthorized") {
+          navigate("/signin");
+          alert("sorry you are unauthorized");
+        }
         if (res?.success == true) {
           let followedPersonId = res?.result?.following.pop();
           socket.emit("sendNotificationForFollowers", {
@@ -85,7 +91,7 @@ const ChatOnline = ({ users, id, socket, conversation }) => {
           alert(`are you sure to follow the ${res?.result?.name}`);
           setLoading(false);
         }
-        console.log(res);
+        // console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -96,42 +102,38 @@ const ChatOnline = ({ users, id, socket, conversation }) => {
     <>
       <div className="chatOnline">
         {conversations?.members[1] !== onlineUserId ? (
-          onlineUser ? (
-            id !== onlineUserId ? (
-              onlineUser?.data?.friend?.name ? (
-                <div className="mainForOnlineUser">
-                  <div
-                    className="chatOnlineFriend"
-                    data-coreui-toggle="modal"
-                    data-coreui-target="#exampleModal"
-                    onClick={createConversation}
-                  >
-                    <div className="chatOnlineImgContainer">
-                      <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUiWoq9EpegXraZkSw81CAR6D0SdHM6e11OQ&usqp=CAU"
-                        alt=""
-                        className="chatOnlineImg"
-                      />
-                      <div className="chatOnlineBadge"></div>
-                    </div>
-                    <span className="chatOnlineName">
-                      {onlineUser?.data?.friend?.name}
-                    </span>
+          id !== onlineUserId ? (
+            onlineUser?.data?.friend?.name ? (
+              <div className="mainForOnlineUser">
+                <div
+                  className="chatOnlineFriend"
+                  data-coreui-toggle="modal"
+                  data-coreui-target="#exampleModal"
+                  onClick={createConversation}
+                >
+                  <div className="chatOnlineImgContainer">
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUiWoq9EpegXraZkSw81CAR6D0SdHM6e11OQ&usqp=CAU"
+                      alt=""
+                      className="chatOnlineImg"
+                    />
+                    <div className="chatOnlineBadge"></div>
                   </div>
-                  <span
-                    className="followText ml-2"
-                    onClick={!loading ? handleFollowedUserData : null}
-                  >
-                    Follow
-                    {/* <i className="fas fa-user-check ml-2"></i> */}
-                    <i className="fas fa-user ml-2"></i>
+                  <span className="chatOnlineName">
+                    {onlineUser?.data?.friend?.name}
                   </span>
                 </div>
-              ) : null
+                <span
+                  className="followText ml-2"
+                  onClick={!loading ? handleFollowedUserData : null}
+                >
+                  Follow
+                  {/* <i className="fas fa-user-check ml-2"></i> */}
+                  <i className="fas fa-user ml-2"></i>
+                </span>
+              </div>
             ) : null
-          ) : (
-            <span className="noOnlineUser">no one was online</span>
-          )
+          ) : null
         ) : null}
       </div>
 

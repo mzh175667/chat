@@ -4,18 +4,10 @@ import { format } from "timeago.js";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const ChatMessages = ({ message, own, socket }) => {
-  const [forSeen, setForSeen] = useState(null);
-  // const { forSeen } = useSelector((state) => state.chat);
-  // console.log("inSelecter", forSeen);
+const ChatMessages = ({ message, own, socket, forSeen }) => {
   const [maxLength, setMaxLength] = useState(600);
-  socket.on("getDataForSeen", (data) => {
-    console.log(data);
-    // setForSeen({
-    //   forSeen: data?.forSeen,
-    // });
-  });
-  console.log("for", forSeen);
+
+  console.log("forseen in messages", forSeen);
   const ReadMore = () => {
     setMaxLength((prev) => prev + 600);
   };
@@ -44,7 +36,7 @@ const ChatMessages = ({ message, own, socket }) => {
               ""
             )}
           </span>
-          {/* {forSeen.seen ? <i className="fas fa-circle seenText"></i> : null} */}
+          {forSeen ? <i className="fas fa-circle seenText"></i> : null}
         </p>
       </div>
       <div className="messagesBottom">{format(message.createdAt)}</div>

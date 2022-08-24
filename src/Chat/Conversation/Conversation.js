@@ -13,7 +13,7 @@ const Conversation = ({
   chatOnline,
 }) => {
   const { forSeen } = useSelector((state) => state.chat);
-
+  console.log(forSeen);
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -41,12 +41,14 @@ const Conversation = ({
   useEffect(() => {
     socket.on("getLastMessage", (data) => {});
   }, [currentUser]);
+
   const UpdateSeenRequest = async (id, receiverId) => {
-    console.log(receiverId);
+    console.log("forSeen.seen", forSeen.seen);
+    dispatch(UPDATE_SEEN_MESSAGE(id));
     dispatch(UPDATE_SEEN_MESSAGE(id));
     socket.emit("sendDataForSeen", {
       receiverId: receiverId,
-      forSeen: forSeen,
+      forSeen: forSeen.seen,
     });
   };
   // console.log("conversation", conversation);

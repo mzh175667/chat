@@ -14,7 +14,7 @@ const App = () => {
   const user = localStorage.getItem("userId");
   console.log(user);
   const token = localStorage.getItem("token");
-  console.log(token);
+  // console.log(token);
   return (
     <div>
       <Routes>

@@ -9,6 +9,7 @@ import "./task.css";
 const Task = () => {
   const [user, setUser] = useState(false);
   const [userFilterData, setUserFilterData] = useState("");
+  console.log("arr=====>", arr);
 
   //  Remove Lahorians
   const RemoveLahorians = () => {

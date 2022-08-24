@@ -6,7 +6,7 @@ function Home() {
   const id = localStorage.getItem("userId");
   console.log(id);
   const token = localStorage.getItem("token");
-  console.log(token);
+  // console.log(token);
   //...(spead operator)  kisi bhi aik value ko spread ker ky multiple arguements ma convert kr deta hai
   return (
     <div>

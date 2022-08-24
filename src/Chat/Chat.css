@@ -130,11 +130,9 @@
   padding: 0px 5px 0px 0px;
 }
 .mainul {
-  /* background-color: #126ee7; */
-  /* color: white; */
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   width: 200px;
 }
 .mainForHeaderIcons {
@@ -186,4 +184,9 @@
 }
 .bottomIcon:hover {
   background-color: #539af7;
+}
+.noOnlineUser {
+  font-size: 25px;
+  padding: 10px;
+  color: rgb(224, 221, 221);
 }
