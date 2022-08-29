@@ -21,6 +21,19 @@
   object-fit: cover;
   margin-right: 20px;
 }
+.forOnlineBadge {
+  position: relative;
+}
+.chatConversationBadge {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  position: absolute;
+  background-color: lime;
+  top: 0px;
+  left: 24px;
+  border: 3px solid white;
+}
 .conversationText {
   font-weight: 500;
   font-size: 17px;

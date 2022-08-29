@@ -26,12 +26,15 @@ const Chat = () => {
   const [user, setUser] = useState("");
   const [maxLength, setMaxLength] = useState(25);
   const [searchBar, setSearchBar] = useState("");
+  const [allUsers, setAllUsers] = useState(null);
+  const [followUsers, setFollowUsers] = useState(null);
+  const [stateForFollowers, setStateForFollowers] = useState(false);
   const [arrivalNotificaationToFollowers, setArrivalNotificaationToFollowers] =
     useState("");
   const [forSeen, setForSeen] = useState(null);
 
   const socket = io.connect("ws://localhost:5000");
-
+  console.log("followUsers=>", followUsers);
   //  user_id
   const id = localStorage.getItem("userId");
   useEffect(() => {
@@ -57,6 +60,7 @@ const Chat = () => {
   }, []);
   useEffect(() => {
     socket.on("getConversation", (conversationData) => {
+      console.log("conversationData", conversationData);
       setArrivalConversation(conversationData.user);
     });
   }, []);
@@ -103,10 +107,14 @@ const Chat = () => {
   useEffect(() => {
     socket.emit("addUser", id);
     socket.on("getUsers", (users) => {
+      console.log("user", user);
+      // console.log("users", users);
       setChatOnline(users);
       // console.log(chatOnline);
     });
   }, [id]);
+  // console.log("chatOnline", chatOnline);
+
   useEffect(() => {
     socket.on("getDataForSeen", (data) => {
       console.log("data=====>", data);
@@ -115,7 +123,7 @@ const Chat = () => {
       });
     });
   });
-  console.log(forSeen);
+  // console.log(forSeen);
   // fetching api's....
 
   // getting conversation
@@ -209,10 +217,42 @@ const Chat = () => {
   const ReadMore = () => {
     setMaxLength((prev) => prev + 20);
   };
-
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/user`);
+        console.log("res", res?.data?.userData);
+        setAllUsers(res?.data?.userData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUser();
+  }, [id]);
+  useEffect(() => {
+    const getFollowedUsers = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/user/following/${id}`
+        );
+        setFollowUsers(res?.data?.friend?.following);
+        // console.log("res=====================>", followUsers);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getFollowedUsers();
+  }, [currentChat]);
   // console.log(conversation);
   // filter method
-  const handleFilterData = () => {};
+
+  const showFollowUsers = () => {
+    setStateForFollowers(true);
+  };
+  const goBack = () => {
+    setStateForFollowers(false);
+  };
+
   return (
     <>
       <div className="top_bar">
@@ -230,7 +270,7 @@ const Chat = () => {
             {notification || arrivalNotificaationToFollowers ? (
               <>
                 <div
-                  className="chatConversationBadge dropdown-toggle"
+                  className="chatNotificationBadge dropdown-toggle"
                   data-bs-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
@@ -304,6 +344,7 @@ const Chat = () => {
                 // onClick={() => FilterData()}
               ></i>
             </div>
+
             {conversation ? (
               conversation.map((c, i) => (
                 <div onClick={() => setCurrentChat(c)} key={i}>
@@ -312,7 +353,8 @@ const Chat = () => {
                     currentUser={id}
                     messages={messages}
                     socket={socket}
-                    users={chatOnline}
+                    onlineUser={chatOnline}
+                    allConversations={conversation}
                   />
                 </div>
               ))
@@ -362,22 +404,53 @@ const Chat = () => {
         </div>
         <div className="chatOnline">
           <div className="chatOnlineWrapper">
-            {chatOnline.length > 1 ? (
-              chatOnline.map((user, i) => (
-                <div key={i}>
-                  <ChatOnline
-                    users={user}
-                    id={id}
-                    socket={socket}
-                    conversation={conversation}
-                  />
+            {!stateForFollowers ? (
+              followUsers != null ? (
+                <>
+                  <span className="FriendsText">Friends</span>
+                  {followUsers.map((user, i) => (
+                    <div key={i}>
+                      <ChatOnline
+                        chatOnline={chatOnline}
+                        id={id}
+                        socket={socket}
+                        users={user}
+                        follow={true}
+                        conversation={conversation}
+                      />
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <span className="noOnlineUser">Follow Someone</span>
+              )
+            ) : allUsers ? (
+              <>
+                <div className="ForAboutUsers">
+                  <i
+                    className="fas fa-arrow-left iconForUser"
+                    onClick={goBack}
+                  ></i>
+                  <span className="UsersText pr-3">User</span>
                 </div>
-              ))
+                {allUsers.map((user, i) => (
+                  <div key={i}>
+                    <ChatOnline
+                      chatOnline={chatOnline}
+                      id={id}
+                      socket={socket}
+                      users={user}
+                      follow={false}
+                      conversation={conversation}
+                    />
+                  </div>
+                ))}
+              </>
             ) : (
-              <span className="noOnlineUser">no one was online</span>
+              <span className="noOnlineUser">here is no user</span>
             )}
           </div>
-          <div className="bottomTabForAboutUsers">
+          <div className="bottomTabForAboutUsers" onClick={showFollowUsers}>
             <i className="fas fa-user  bottomIcon"></i>
           </div>
         </div>

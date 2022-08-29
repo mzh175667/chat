@@ -74,6 +74,7 @@
 .chatOnlineWrapper {
   padding: 10px;
   height: 95%;
+  overflow-y: scroll;
 }
 
 .top_bar {
@@ -109,7 +110,7 @@
   margin-bottom: 10px;
   margin-top: 10px;
 }
-.chatConversationBadge {
+.chatNotificationBadge {
   height: 15px;
   width: 15px;
   border-radius: 50%;
@@ -130,9 +131,7 @@
   padding: 0px 5px 0px 0px;
 }
 .mainul {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-radius: 10px;
   width: 200px;
 }
 .mainForHeaderIcons {
@@ -189,4 +188,24 @@
   font-size: 25px;
   padding: 10px;
   color: rgb(224, 221, 221);
+}
+.FriendsText {
+  font-size: 20px;
+  padding: 10px;
+  color: black;
+  display: flex;
+  justify-content: center;
+}
+.UsersText {
+  font-size: 20px;
+  color: black;
+}
+.ForAboutUsers {
+  display: flex;
+  justify-content: space-between;
+}
+.iconForUser {
+  padding: 12px 0px 0px 10px;
+  font-size: larger;
+  cursor: pointer;
 }

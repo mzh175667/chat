@@ -4,57 +4,42 @@ import "./ChatOnline.css";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
-const ChatOnline = ({ users, id, socket, conversation }) => {
+const ChatOnline = ({ chatOnline, id, socket, users, follow }) => {
   const navigate = useNavigate();
+  // console.log("users=================>", users);
 
-  var conversations = conversation[0];
+  // var conversations = conversation?.members[1];
   const [followedUser, setFollowedUser] = useState("");
-  const [onlineUser, setOnlineUser] = useState(null);
   const [loading, setLoading] = useState(null);
-  for (let i = 0; i <= conversation.length; i++) {
-    conversations = conversation[i];
-    // console.log(conversations?.members[1]);
-  }
-  const onlineUserId = users?.userId;
+  const [keyForOnline, setKeyForOnline] = useState(false);
+  const onlineUserId = chatOnline?.userId;
   const [show, setShow] = useState(false);
-  // const friendId = users?.conversation?.members.find((m) => m !== id);
-  // console.log(friendId);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const token = localStorage.getItem("token");
   // console.log(token);
-
+  // console.log(users?._id);
   useEffect(() => {
-    if (onlineUserId !== undefined) {
-      const getUser = async () => {
-        try {
-          const res = await axios.get(
-            `http://localhost:5000/user/${onlineUserId}`
-          );
-          setOnlineUser(res);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      getUser();
-    }
-  }, [users]);
-  const createConversation = async () => {
+    chatOnline.map((item) => {
+      // console.log("item", item?.userId, "users?._id", users?._id);
+      if (item?.userId === users?._id) {
+        setKeyForOnline(true);
+      }
+    });
+  }, [chatOnline]);
+  console.log("chatOnline", chatOnline);
+
+  const createConversation = async (receiverId) => {
     const conversation = {
       senderId: id,
-      receiverId: onlineUserId,
+      receiverId: receiverId,
     };
     try {
       const res = await axios.post(
         "http://localhost:5000/conversation",
         conversation
       );
-      console.log(res);
-      if (res) {
-        alert(
-          `are you sure to create a conversation with ${onlineUser?.data?.friend?.name}`
-        );
-      }
+      console.log("ressssssss", res);
       socket.emit("sendConversation", {
         user: res?.data,
         senderId: id,
@@ -63,25 +48,32 @@ const ChatOnline = ({ users, id, socket, conversation }) => {
       console.log(error);
     }
   };
-  const handleFollowedUserData = async () => {
+  const handleFollowedUserData = async (receiverId) => {
+    console.log("receiverId", receiverId);
     setLoading(true);
-    await fetch("http://localhost:5000/users/follow", {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json",
-        Authorization: token,
-      },
-      body: JSON.stringify({
-        followId: onlineUserId,
-      }),
-    })
+    await fetch(
+      follow
+        ? "http://localhost:5000/users/unfollow"
+        : "http://localhost:5000/users/follow",
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify({
+          followId: receiverId,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then((res) => {
         if (res?.message == "unauthorized") {
           navigate("/signin");
           alert("sorry you are unauthorized");
         }
+        console.log("ressssssssssssss", res);
         if (res?.success == true) {
           let followedPersonId = res?.result?.following.pop();
           socket.emit("sendNotificationForFollowers", {
@@ -97,19 +89,19 @@ const ChatOnline = ({ users, id, socket, conversation }) => {
         console.log(err);
       });
   };
-
   return (
     <>
       <div className="chatOnline">
-        {conversations?.members[1] !== onlineUserId ? (
-          id !== onlineUserId ? (
-            onlineUser?.data?.friend?.name ? (
+        {
+          // conversations?.members[1] !== onlineUserId ? (
+          id != users?._id ? (
+            users?.name ? (
               <div className="mainForOnlineUser">
                 <div
                   className="chatOnlineFriend"
                   data-coreui-toggle="modal"
                   data-coreui-target="#exampleModal"
-                  onClick={createConversation}
+                  onClick={() => createConversation(users?._id)}
                 >
                   <div className="chatOnlineImgContainer">
                     <img
@@ -117,26 +109,29 @@ const ChatOnline = ({ users, id, socket, conversation }) => {
                       alt=""
                       className="chatOnlineImg"
                     />
-                    <div className="chatOnlineBadge"></div>
+                    {keyForOnline ? (
+                      <div className="chatOnlineBadge"></div>
+                    ) : null}
                   </div>
-                  <span className="chatOnlineName">
-                    {onlineUser?.data?.friend?.name}
-                  </span>
+                  <span className="chatOnlineName">{users?.name}</span>
                 </div>
                 <span
                   className="followText ml-2"
-                  onClick={!loading ? handleFollowedUserData : null}
+                  onClick={() => handleFollowedUserData(users?._id)}
                 >
-                  Follow
-                  {/* <i className="fas fa-user-check ml-2"></i> */}
-                  <i className="fas fa-user ml-2"></i>
+                  {follow ? "unFollow" : "Follow"}
+                  {follow ? (
+                    <i className="fas fa-user-check ml-2"></i>
+                  ) : (
+                    <i className="fas fa-user ml-2"></i>
+                  )}
                 </span>
               </div>
             ) : null
           ) : null
-        ) : null}
+          // ) : null
+        }
       </div>
-
       <Modal
         size="md"
         // aria-labelledby="contained-modal-title-vcenter"
@@ -149,7 +144,7 @@ const ChatOnline = ({ users, id, socket, conversation }) => {
         </Modal.Header>
         <Modal.Body>
           Are you sure to create conversation with{" "}
-          {onlineUser?.data?.friend?.name}
+          {/* {onlineUser?.data?.friend?.name} */}
           <h1>sjdbnlkkdzv nkl</h1>
         </Modal.Body>
         <Modal.Footer>

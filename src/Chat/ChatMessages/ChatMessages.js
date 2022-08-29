@@ -36,7 +36,9 @@ const ChatMessages = ({ message, own, socket, forSeen }) => {
               ""
             )}
           </span>
-          {forSeen ? <i className="fas fa-circle seenText"></i> : null}
+          {forSeen?.forSeen && own ? (
+            <i className="fas fa-circle seenText"></i>
+          ) : null}
         </p>
       </div>
       <div className="messagesBottom">{format(message.createdAt)}</div>

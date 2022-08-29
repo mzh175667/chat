@@ -10,15 +10,16 @@ const Conversation = ({
   currentUser,
   messages,
   socket,
-  chatOnline,
+  onlineUser,
+  allConversations,
 }) => {
   const { forSeen } = useSelector((state) => state.chat);
-  console.log(forSeen);
   const dispatch = useDispatch();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [keyForOnline, setKeyForOnline] = useState(false);
+  const friendId = conversation?.members.find((m) => m !== currentUser);
   useEffect(() => {
-    const friendId = conversation?.members.find((m) => m !== currentUser);
     if (friendId !== undefined) {
       const getUser = async () => {
         try {
@@ -43,7 +44,6 @@ const Conversation = ({
   }, [currentUser]);
 
   const UpdateSeenRequest = async (id, receiverId) => {
-    console.log("forSeen.seen", forSeen.seen);
     dispatch(UPDATE_SEEN_MESSAGE(id));
     dispatch(UPDATE_SEEN_MESSAGE(id));
     socket.emit("sendDataForSeen", {
@@ -51,7 +51,26 @@ const Conversation = ({
       forSeen: forSeen.seen,
     });
   };
-  // console.log("conversation", conversation);
+
+  // console.log("allConversations===========>", allConversations);
+  useEffect(() => {
+    onlineUser.map((item) => {
+      if (item?.userId === friendId) {
+        setKeyForOnline(true);
+      }
+    });
+    allConversations.map((item) => {
+      item?.members.map((item) => {
+        if (item[1] === friendId || item[0] === friendId) {
+          setKeyForOnline(true);
+        }
+      });
+    });
+  }, [onlineUser]);
+  // useEffect(() => {
+  //   socket.emit
+  // }, []);
+
   return (
     <div
       className={
@@ -64,16 +83,19 @@ const Conversation = ({
       }
     >
       <>
-        <img
-          className="conversationImg"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUiWoq9EpegXraZkSw81CAR6D0SdHM6e11OQ&usqp=CAU"
-          alt=""
-        />
+        <div className="forOnlineBadge">
+          <img
+            className="conversationImg"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUiWoq9EpegXraZkSw81CAR6D0SdHM6e11OQ&usqp=CAU"
+            alt=""
+          />
+          {keyForOnline ? <div className="chatConversationBadge"></div> : null}
+        </div>
         <div className="conversationUser">
           <span className="conversationText">
             {!loading ? user?.name : "..."}
           </span>
-          {/* {conversation._id === lastMessage?.data?.conversationId ? ( */}
+          {/* {c._id === lastMessage?.data?.conversationId ? ( */}
           <div className="lastMessage">
             {conversation?.lastMessage
               ? conversation?.lastMessage.substring(0, 40)
