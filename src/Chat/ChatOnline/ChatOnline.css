@@ -45,6 +45,7 @@
   color: rgb(224, 221, 221);
   margin-top: 30px;
   cursor: pointer;
+  display: flex;
 }
 .followText:hover {
   color: #1676f0;

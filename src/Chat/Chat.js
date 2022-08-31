@@ -40,12 +40,12 @@ const Chat = () => {
   useEffect(() => {
     console.log(user?.name);
     if (user) {
-      setTimeout(() => {
-        if (!user?.name) {
-          navigate("/signin");
-          alert("sorry you are not register");
-        }
-      }, 3000);
+      // setTimeout(() => {
+      if (!user?.name || user?.name == undefined) {
+        navigate("/signin");
+        alert("sorry you are not register");
+      }
+      // }, 2000);
     }
   }, []);
   // including socket.io
@@ -250,6 +250,7 @@ const Chat = () => {
     setStateForFollowers(true);
   };
   const goBack = () => {
+    navigate("/loading...");
     setStateForFollowers(false);
   };
 
@@ -407,7 +408,7 @@ const Chat = () => {
             {!stateForFollowers ? (
               followUsers != null ? (
                 <>
-                  <span className="FriendsText">Friends</span>
+                  <span className="FriendsText">Friends list</span>
                   {followUsers.map((user, i) => (
                     <div key={i}>
                       <ChatOnline

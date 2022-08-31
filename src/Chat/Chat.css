@@ -194,7 +194,7 @@
   padding: 10px;
   color: black;
   display: flex;
-  justify-content: center;
+  justify-content: start;
 }
 .UsersText {
   font-size: 20px;
