@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
 import { useNavigate, Link } from "react-router-dom";
-
+import Wave from "react-wavify";
 const SignIn = () => {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
@@ -15,7 +15,8 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-  const signUp = async (e) => {
+
+  const signIn = async (e) => {
     e.preventDefault();
     let { email, password } = user;
     const data = {
@@ -65,56 +66,70 @@ const SignIn = () => {
     setUser({ ...user, [name]: value });
   };
   return (
-    //   <div className="main">
-    <div className="main mt-4 pt-3">
-      <div className="app_auth">
-        <div className="imgMainDiv">
-          <img
-            className="chatSignInImg pb-3 pl-3"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlK3BMFdRkYNxYjR1pzkU-OpRo4N6lKYD8nQ&usqp=CAU"
-            alt=""
-          />
-        </div>
-        <div className="header">
-          <div className="header_sign_in text-center">
-            {/* <span class Name="icon1"><i className="fas fa-angle-left"></i></span> */}
-            SignIn
+    <div>
+      <div className="main mt-4 pt-3">
+        <div className="app_auth">
+          <div className="imgMainDiv">
+            {/* <img
+              className="chatSignInImg pb-3 pl-3"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlK3BMFdRkYNxYjR1pzkU-OpRo4N6lKYD8nQ&usqp=CAU"
+              alt=""
+            /> */}
           </div>
-        </div>
-        <form method="POST">
-          <div className="col-md-12">
-            <div className="name_signUp pt-5">
-              <input
-                placeholder="Email"
-                className="inputs"
-                onChange={postData}
-                value={user.email}
-                name="email"
-              />
-            </div>
-            <div className="name_signUp pt-5">
-              <input
-                type="password"
-                placeholder="Password"
-                className="inputs"
-                onChange={postData}
-                value={user.password}
-                name="password"
-              />
-            </div>
-            <Link to="/signup" className="aboutAccountText">
-              Create account
-            </Link>{" "}
-            <div className="pt-5">
-              <button className="auth_footer_button" onClick={signUp}>
-                SignIn
-              </button>
+          <div className="header">
+            <div className="header_sign_in text-center">
+              {/* <span class Name="icon1"><i className="fas fa-angle-left"></i></span> */}
+              SignIn
             </div>
           </div>
-        </form>
+          <form method="POST">
+            <div className="col-md-12">
+              <div className="name_signUp pt-5">
+                <input
+                  placeholder="Email"
+                  className="inputs"
+                  onChange={postData}
+                  value={user.email}
+                  name="email"
+                />
+              </div>
+              <div className="name_signUp pt-5">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="inputs"
+                  onChange={postData}
+                  value={user.password}
+                  name="password"
+                />
+              </div>
+              <Link to="/signup" className="aboutAccountText">
+                Create account
+              </Link>
+              <div className="pt-5 mt-5">
+                <button className="auth_footer_button" onClick={signIn}>
+                  SignIn
+                </button>
+              </div>
+            </div>
+          </form>
+          <div style={{ width: "100%" }}>
+            <Wave
+              fill="#1676f0"
+              paused={false}
+              className="pt-5 mt-4 pl-0 pr-0"
+              options={{
+                height: 20,
+                width: "100%",
+                amplitude: 20,
+                speed: 0.15,
+                points: 3,
+              }}
+            />
+          </div>
+        </div>
       </div>
     </div>
-    //  </div>
   );
 };
 export default SignIn;

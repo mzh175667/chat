@@ -326,13 +326,13 @@
 }
 .app_auth {
   background-color: #fcfbfc;
-  box-shadow: -31px -15px 149px -63px rgba(247, 241, 241, 0.96);
-  -webkit-box-shadow: -31px -15px 149px -63px rgba(252, 245, 245, 0.96);
-  -moz-box-shadow: -31px -15px 149px -63px rgba(252, 246, 246, 0.96);
+  /* box-shadow: -31px -15px 149px -63px rgba(247, 241, 241, 0.96); */
+  /* -webkit-box-shadow: -31px -15px 149px -63px rgba(252, 245, 245, 0.96); */
+  /* -moz-box-shadow: -31px -15px 149px -63px rgba(252, 246, 246, 0.96); */
   margin-top: 5%;
   margin-bottom: 5%;
   align-items: center;
-  height: 500px;
+  height: 490px;
   width: 300px;
   border-radius: 20px;
 }
